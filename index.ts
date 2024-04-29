@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import http from 'http';
 import mongoose from "mongoose";
+import router from './src/routes/routes';
 import { listen_port,db_conn_string } from './src/config/config';
 const { urlencoded, json: _json } = bodyParser;
 const app: Application = express();
@@ -25,6 +26,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use('/api', router);
 main().catch((err) => console.log(err));
 
 async function main() {

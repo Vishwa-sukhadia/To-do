@@ -8,6 +8,13 @@ export interface Users {
   password: string;
 }
 
+export interface ToDo {
+  title: string;
+  description: string;
+  dueDate: Date;
+  completed: boolean;
+  user: mongoose.Schema.Types.ObjectId;
+}
 
 export interface Query {
   [key: string]: any;

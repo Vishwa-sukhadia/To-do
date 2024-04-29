@@ -2,6 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Users } from '../helpers/interface';
 import {expire_time, jwt_secret_key } from '../config/config';
+import { ObjectId } from "mongoose";
+import Todo from "../models/todo";
+import { getSingleData } from './common_api';
 import { timezone } from './constant';
 import moment from 'moment-timezone';
 
@@ -31,6 +34,15 @@ export const generateToken = async (user_data: Users): Promise<string> => {
     return token;
 };
 
+export const verifyAccess = async(user:ObjectId):Promise<boolean>=>{
+    const query={
+        user:user
+    }
+    const get_todo= await getSingleData(query,Todo)
+    if(get_todo.data==null)  return false
+    else if(get_todo.error) return false
+    return true
+}
 
 export const generateRandomString=(): string=> {
     let characters: string = 'abcdefghijklmnopqrstuvwxyz0123456789';

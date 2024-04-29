@@ -48,5 +48,37 @@ export async function updateTodo(body: ToDo,id:string,user:ObjectId): Promise<Se
         message: responseMessage(error, updating),
         error: update_todo.error,
       };
+}
+
+export async function deleteTodo(id:string,user:ObjectId): Promise<ServiceResult> {
+    const verify_user=await verifyAccess(user,id)
+    if(!verify_user) return {
+      statusCode: statusCode.BADREQUEST,
+      success: 0,
+      message: responseMessage(no_access),
+    };
+    const delete_todo = await commonApi.deleteSingleData({_id:id}, Todo);
+    if (delete_todo.data.deletedCount==1) {
+      return {
+        statusCode: statusCode.SUCCESS,
+        success: 1,
+        message: responseMessage(success, deleted, todo),
+      };
+    } 
+    else if(delete_todo.data.deletedCount==0){
+      return {
+        statusCode: statusCode.NOTFOUND,
+        success: 1,
+        message: responseMessage(not_found, todo),
+      };
+    }
+    else
+      return {
+        statusCode: statusCode.BADREQUEST,
+        success: 0,
+        message: responseMessage(error, deleting),
+        error: delete_todo.error,
+      };
   }
+
   

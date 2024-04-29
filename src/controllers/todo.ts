@@ -32,3 +32,17 @@ export async function updateTodo(req: CustomRequest, res: Response): Promise<voi
         responseData({ res, statusCode: statusCode.SERVER_ERROR, success: 0, message: error.message });
     }
 }
+
+// Delete todo
+export async function deleteTodo(req: CustomRequest, res: Response): Promise<void> {
+    try {
+        const result = await service.todoService.deleteTodo(req.params.id,req.user.data._id);
+        if (!result) {
+            responseData({ res, statusCode: statusCode.BADREQUEST, success: 0, message: responseMessage(error, deleting,todo) });
+            return;
+        }
+        responseData({ res, ...result });
+    } catch (error:any) {
+        responseData({ res, statusCode: statusCode.SERVER_ERROR, success: 0, message: error.message });
+    }
+}

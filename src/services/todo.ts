@@ -138,7 +138,7 @@ export async function getSingleTodo(
     additional
   );
   if (todo_data.data) {
-    const verify_user = await verifyAccess(user,id);
+    const verify_user = await verifyAccess(user, id);
     if (!verify_user)
       return {
         statusCode: statusCode.BADREQUEST,
@@ -164,4 +164,14 @@ export async function getSingleTodo(
       message: responseMessage(error, getting),
       error: todo_data.error,
     };
+}
+
+export async function updateTodoStatus(): Promise<void> {
+  const get_all_todo = await commonApi.getAllData({}, Todo);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const update_status = { completed: true };
+  const query = { dueDate: { $lt: today } };
+  if (get_all_todo.data.length > 0)
+    commonApi.bulkUpdate(query, update_status, Todo);
 }

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
-import { Request as ExpressRequest } from 'express';
-
+import { Request as ExpressRequest } from "express";
 
 export interface Users {
   _id?: string;
@@ -16,6 +15,12 @@ export interface ToDo {
   user: mongoose.Schema.Types.ObjectId;
 }
 
+export interface ScheduleExecution {
+  unique_name: string;
+  rule: object;
+  nextExecution: Date;
+}
+
 export interface Query {
   [key: string]: any;
 }
@@ -25,7 +30,7 @@ export interface AdditionalQuery {
 }
 
 export interface CustomRequest extends ExpressRequest {
-    user?: any; 
+  user?: any;
 }
 
 export interface Response {

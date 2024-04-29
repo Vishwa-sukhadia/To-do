@@ -18,3 +18,17 @@ export async function createTodo(req: CustomRequest, res: Response): Promise<voi
         responseData({ res, statusCode: statusCode.SERVER_ERROR, success: 0, message: error.message });
     }
 }
+
+// Update todo
+export async function updateTodo(req: CustomRequest, res: Response): Promise<void> {
+    try {
+        const result = await service.todoService.updateTodo(req.body,req.params.id,req.user.data._id);
+        if (!result) {
+            responseData({ res, statusCode: statusCode.BADREQUEST, success: 0, message: responseMessage(error, updating,todo) });
+            return;
+        }
+        responseData({ res, ...result });
+    } catch (error:any) {
+        responseData({ res, statusCode: statusCode.SERVER_ERROR, success: 0, message: error.message });
+    }
+}

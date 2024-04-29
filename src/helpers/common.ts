@@ -34,9 +34,10 @@ export const generateToken = async (user_data: Users): Promise<string> => {
     return token;
 };
 
-export const verifyAccess = async(user:ObjectId):Promise<boolean>=>{
+export const verifyAccess = async(user:ObjectId,id:string):Promise<boolean>=>{
     const query={
-        user:user
+        user:user,
+        _id:id
     }
     const get_todo= await getSingleData(query,Todo)
     if(get_todo.data==null)  return false

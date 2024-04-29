@@ -25,3 +25,42 @@ export async function createUser(body: Users): Promise<ServiceResult> {
       error: create_user.error,
     };
 }
+
+
+export async function login(body: Users): Promise<ServiceResult> {
+    const query = { email: body.email };
+    const user_data = await commonApi.getSingleData(query, User);
+    if (user_data.error)
+      return {
+        statusCode: statusCode.BADREQUEST,
+        success: 0,
+        message: responseMessage(error, getting),
+        error: user_data.error,
+      };
+    if (user_data.data == null)
+      return {
+        statusCode: statusCode.NOTFOUND,
+        success: 0,
+        message: responseMessage(invalid, "Email"),
+      };
+    const password_match = await common.passwordCompare(
+      body.password,
+      user_data.data.password
+    );
+    if (password_match == false)
+      return {
+        statusCode: statusCode.NOTFOUND,
+        success: 0,
+        message: responseMessage(invalid, "Password"),
+      };
+    const token = await common.generateToken(user_data.data);
+    delete user_data.data._doc.password;
+    user_data.data.set("token", token, { strict: false });
+    return {
+      statusCode: statusCode.SUCCESS,
+      success: 1,
+      message: responseMessage(user_logged),
+      data: user_data.data,
+    };
+  }
+  

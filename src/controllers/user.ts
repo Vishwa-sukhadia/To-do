@@ -18,3 +18,17 @@ export async function createUser(req: Request, res: Response): Promise<void> {
         responseData({ res, statusCode: statusCode.SERVER_ERROR, success: 0, message: error.message });
     }
 }
+
+// User login
+export async function userLogin(req: Request, res: Response): Promise<void> {
+    try {
+        const result = await service.userService.login(req.body);
+        if (!result) {
+            responseData({ res, statusCode: statusCode.BADREQUEST, success: 0, message: responseMessage(user_not_logged) });
+            return;
+        }
+        responseData({ res, ...result });
+    } catch (error:any) {
+        responseData({ res, statusCode: statusCode.SERVER_ERROR, success: 0, message: error.message });
+    }
+}

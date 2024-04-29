@@ -1,2 +1,2 @@
-# To-do
-User's Todo
+# todo
+Todo for users.
